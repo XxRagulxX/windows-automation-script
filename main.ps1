@@ -11,7 +11,7 @@ $packagesdisplay = @(
     "qBittorrent",
     "Stremio",
     "Microsoft.Visual.c++.2015-2022.64",
-    "7zip"
+    "7zip",
     "Surfshark"
 )
 
