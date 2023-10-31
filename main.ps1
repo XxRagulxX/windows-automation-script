@@ -48,7 +48,8 @@ while ($true) {
     Write-Host ("{0}. Exit" -f ($packagesdisplay.Length + 1))
     
     # Get user input
-    $selection = Read-Host "Enter the option number"
+    $selection1 = Read-Host "Enter the option number"
+    $selection = [int]$selection1
     if ($selection -eq ($packagesdisplay.Length + 1)) {
      Write-Host "Exiting......." #Exit Loop
      break }
@@ -61,25 +62,21 @@ while ($true) {
         $confirmedbrowser = $browserpackages[$BrowserSelection - 1]
         winget install $confirmedbrowser
         foreach ($package in $packages) {
-            if (-not (IsInstalled $package)) {
-                    Write-Host "Installing $package..."
-                    winget install $package
-                }
-                else {
-                    Write-Host "$package is already installed."
-                } }
-    }
-    elseif ($selection -ge 1 -and $selection -le $browserpackages.Length) {
+         Write-Host "Installing $package..."
+         winget install $package } 
+         }
+    elseif ($selection -ge 1 -and $selection -le ($browserpackages.Length)){
        # Install the selected package
        $selectedPackage = $browserpackages[$selection - 1]
-      winget install $selectedPackage
-              
+       Write-Host "hi"
+       winget install $selectedPackage          
     }
     elseif ($selection -gt $browserpackages.Length) {
         $selectedPackage = $packages[$selection - ($browserpackages.Length + 1)]
+        Write-Host $selectedpackage
         winget install $selectedpackage
       } 
-     }
     }
+   }
 # Call the InstallPackages function
 InstallPackages
