@@ -76,7 +76,6 @@ Select packages to install:
         if ($BrowserSelection -le $browserpackages.length) {
             $confirmedbrowser = $browserpackages[$BrowserSelection - 1]
             $display_text= $packagesdisplay[$BrowserSelection - 1]
-            Write-Host $confirmedbrowser
             Write-Host " 
         Installing $display_text...
 
