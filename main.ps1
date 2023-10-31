@@ -31,8 +31,8 @@ $packages = @(
     "qBittorrent.qBittorrent",
     "Stremio.Stremio",
     "Microsoft.VCRedist.2015+.x64",
-    "7zip.7zip"
-    "Surfshark.Surfshark"
+    "7zip.7zip",
+    "Surfshark.Surfshark",
     "Spotify.Spotify"
 )
 
