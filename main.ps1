@@ -12,7 +12,8 @@ $packagesdisplay = @(
     "Stremio",
     "Microsoft.Visual.c++.2015-2022.64",
     "7zip",
-    "Surfshark"
+    "Surfshark",
+    "Spotify"
 )
 
 $browserpackages = @(
@@ -32,6 +33,7 @@ $packages = @(
     "Microsoft.VCRedist.2015+.x64",
     "7zip.7zip"
     "Surfshark.Surfshark"
+    "Spotify.Spotify"
 )
 
 Function InstallPackages {
