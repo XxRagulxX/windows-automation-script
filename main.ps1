@@ -40,7 +40,7 @@ Function InstallPackages {
   while ($true) {
     # Display package options
     Write-Host "
-    こんにちは, Welcome to DEFALT's windows Package installer 
+    こんにちは, Welcome to DEFALT's Windows Package Installer 
     " -ForegroundColor Red
     Write-Host "
 Select packages to install:
