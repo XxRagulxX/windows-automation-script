@@ -50,7 +50,7 @@ while ($true) {
     # Get user input
     $selection = Read-Host "Enter the option number"
     if ($selection -eq ($packagesdisplay.Length + 1)) {
-     Write-Host "Exiting......."
+     Write-Host "Exiting......." #Exit Loop
      break }
     elseif ($selection -eq (0)) {
         # Install all packages
