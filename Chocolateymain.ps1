@@ -65,7 +65,7 @@ function InstallBrowser{
                 break
             }
         }
-        $choice = Read-Host "Enter the number of the Browser you want to install: "
+        $choice = Read-Host "Enter the number of the Browser you want to install (e.g., 1 for Brave.Brave, or 'q' to quit): "
         if ($choice -eq 'q') {
             $browsercontinue = $false
             break
@@ -134,4 +134,4 @@ while ($continue) {
     }
 }
 
-Write-Host "Thank for Using. Made with Love :)"
+Write-Host "Thank you for Using. Made with Love :)"
