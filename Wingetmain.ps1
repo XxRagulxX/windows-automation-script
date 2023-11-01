@@ -35,7 +35,7 @@ $pkgbrowseralias = @(
 )
 
 
-function InstallBrowser{
+function InstallBrowser{  # Install Browser 
     $browsercontinue = $true
     while ($browsercontinue){
         Write-Host "Select Browser to install"
@@ -63,7 +63,7 @@ function InstallBrowser{
 
 
 
-function WingetInstallSoftware {
+function WingetInstallSoftware { # Install Software 
     $wingetinstall_software = $true
     while ($wingetinstall_software) {
         Write-Host "Select Software to Install"
@@ -95,7 +95,7 @@ function WingetInstallSoftware {
     }
 }
 
-function WingetUninstaller{
+function WingetUninstaller{ # Install Uninstaller 
     $wingetuninstaller = $true
     while($wingetuninstaller) {
         Write-Host "Select Software to Install"
