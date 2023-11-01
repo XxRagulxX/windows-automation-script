@@ -38,7 +38,7 @@ while ($continue) {
             Write-Host "$($i + 2). $($packages[$i + 3])"
         } #Added Proper For loop to start from VLC
 
-        $choice = Read-Host "Enter the number of the software you want to install (e.g., 1 for all, 2 for Brave.Brave, or 'q' to quit):"
+        $choice = Read-Host "Enter the number of the software you want to install (e.g., 1 for all, 2 for Vlc.., or 'q' to quit):" 
 
         if ($choice -eq 'q') {
             $continue = $false
