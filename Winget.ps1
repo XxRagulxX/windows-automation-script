@@ -1,6 +1,4 @@
 ﻿# Define an array of package names
-
-
 $displayoptions = @(
     "Browser"
     "communication"
