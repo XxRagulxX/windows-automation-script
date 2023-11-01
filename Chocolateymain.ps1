@@ -15,8 +15,9 @@ $pkgalias = @(
     "Stremio"
     "Microsoft Visual C++"
     "7-Zip"
+    "Spotify"
 )
-$packages = @(
+$choco_packages = @(
     #"TechPowerUp.NVCleanstall",
     "vlc",
     "discord",
@@ -26,6 +27,20 @@ $packages = @(
     "stremio",
     "vcredist140",
     "7zip"
+    "spotify"
+)
+
+$winget_packages = @(
+    "VideoLAN.VLC",
+    "Discord.Discord",
+    "EpicGames.EpicGamesLauncher",
+    #"Valve.Steam",
+    "qBittorrent.qBittorrent",
+    #"Stremio.Stremio",
+    #"Microsoft.VCRedist.2015+.x64",
+    "7zip.7zip"
+    #"Surfshark.Surfshark",
+   # "Spotify.Spotify"
 )
 $browserpackages = @(
     "brave",
@@ -56,15 +71,15 @@ function InstallSoftware {
         }
 
         if ($choice -eq 1) {
-            foreach ($package in $packages) {
+            foreach ($package in $choco_packages) {
                 Write-Host "Installing $package..."
                 Invoke-Expression "choco install $package -y"
             }
         } elseif ($choice -ge 2) {
-            $selectedPackage = $packages[$choice - 2]
+            $selectedPackage = $choco_packages[$choice - 2]
             Write-Host "Installing $selectedPackage..."
             Invoke-Expression "choco install $selectedPackage -y -q"
-        }
+        } 
          else {
             Write-Host "Invalid choice"
         }
@@ -105,7 +120,7 @@ function Uninstallsoftware{
         for ($i = 0; $i -lt $pkgalias.Count; $i++) {
             Write-Host "$($i + 1). $($pkgalias[$i])"
         }
-        $choice = Read-Host "Enter the number of the software you want to uninstall (e.g., 1 for Brave.Brave, or 'q' to quit):"
+        $choice = Read-Host "Enter the number of the software you want to uninstall (e.g., 1 for Brave.Brave, or 'q' to quit): "
 
         if ($choice -eq 'q') {
             $uninstallsoftware = $false
@@ -113,7 +128,7 @@ function Uninstallsoftware{
         }
 
         if ($choice -ge 1) {
-            $selectedPackage = $packages[$choice - 1]
+            $selectedPackage = $choco_packages[$choice - 1]
             Write-Host "Uninstalling $selectedPackage..."
             Invoke-Expression "choco uninstall $selectedPackage -y"
         } else {
@@ -124,31 +139,94 @@ function Uninstallsoftware{
 
 }
 
+function WingetInstallSoftware {
+    $wingetinstall_software = $true
+    while ($wingetinstall_software) {
+        Write-Host "Select Software to Install"
+        Write-Host "1. Install all software"
+        
+        for($i = 0; $i -lt $pkgalias.Length; $i++){
+            Write-Host ("{0}. {1}" -f ($i + 2), $pkgalias[$i])
+        }
+        $choice = Read-Host "Enter the number of the software you want to install (e.g., 1 for all, 2 for Vlc.., or 'q' to quit): "
+
+        if($choice -eq 'q'){
+            $wingetinstall_software = $false
+            break
+        }
+        if ($choice -eq 1) {
+            foreach ($package in $winget_packages) {
+                Write-Host "Installing $package..."
+                winget install $package -h
+            }
+        }
+        elseif ($choice -ge 2){
+            $selectedPackage = $winget_packages[$choice - 2]
+            Write-Host "Installing $selectedPackage..."
+            winget install $selectedPackage -h
+        }
+        else {
+            Write-Host "Invalid action. Please select a valid option."
+        }
+    }
+}
+
+function WingetUninstaller{
+    $wingetuninstaller = $true
+    while($wingetuninstaller) {
+        Write-Host "Select Software to Install"
+
+        for ($i = 0; $i -lt $pkgalias.Count; $i++) {
+            Write-Host "$($i + 1). $($pkgalias[$i])"
+        }
+
+        $choice = Read-Host "Enter the number of the software you want to uninstall (e.g. 1. for Vlc.., or 'q' to quit): "
+
+        if($choice -eq 'q'){
+            $wingetuninstaller = $false
+            break
+        }
+        if ($choice -ge 1) {
+            $selectedPackage = $winget_packages[$choice - 1]
+            Write-Host "Uninstalling $selectedPackage..."
+            winget uninstall --id $selectedPackage -h
+        } else {
+            Write-Host "Invalid choice. Please select a valid option."
+        }
+
+    }
+}
 
 
 $continue = $true
 
 while ($continue) {
     Write-Host "Select an action:"
-    Write-Host "1. Install software"
-    Write-Host "2. Install Browser"
+    Write-Host "1. Choco Install software"
+    Write-Host "2. Choco Install Browser"
     Write-Host "3. Uninstall software"
-    Write-Host "4. Quit"
+    Write-Host "4. Experimental - Winget"
+    Write-Host "5. Experimental - Winget Uninstall"
 
-    $action = Read-Host "Enter the number of the action you want to perform (e.g., 1 for install, 4 to quit): "
+    $action = Read-Host "Enter the number of the action you want to perform (e.g., 1 for install, 6 to quit): "
 
-    if ($action -eq '4') {
+    if ($action -eq '6') {
         $continue = $false
         continue
     }
-
     if ($action -eq '1') {
         InstallSoftware
     } elseif ($action -eq '2') {
         InstallBrowser
     } elseif ($action -eq '3') {
         Uninstallsoftware
-    } else {
+    } elseif ($action -eq '4'){
+        WingetInstallSoftware
+    } elseif ($action -eq '5'){
+        WingetUninstaller
+    }
+
+     else {
         Write-Host "Invalid action. Please select a valid option."
     }
 }
