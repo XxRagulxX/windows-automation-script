@@ -187,7 +187,7 @@ Function DisplayPackages {
             )
             $selecteduseroption = $packagearray[$selection - 1]
             $neededpackage = $packages[$selecteduseroption]
-            [string[]] $allpackages = $neededpackage.keys | Sort-Object
+            [string[]] $allpackages = $neededpackage.keys
             $key_count = 0
             foreach ($keys in $allpackages) { 
                 Write-HOST ("{0}. {1}" -f ($key_count + 1), $keys) 
