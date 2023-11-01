@@ -1,4 +1,5 @@
-﻿$displayoptions = @(
+# Define an array of package names
+$displayoptions = @(
     "Browser",
     "communication",
     "DEV-Tools",
@@ -149,21 +150,20 @@ $packages = @{
     }
 }
 Function DisplayPackages {
-    $display_option_legnth = $displayoptions.Length
     while ($true) {
         # Display package options
         Write-Host "
     こんにちは, Welcome to DEFALT's windows Package installer" -ForegroundColor Red
-        for ($i = 0; $i -lt $display_option_legnth; $i++) {
+        for ($i = 0; $i -lt $displayoptions.Length; $i++) {
             Write-Host ("  {0}. {1}" -f ($i + 1), $displayoptions[$i] ) -ForegroundColor Yellow 
         }
-        Write-Host ("  {0}. Exit" -f ($display_option_legnth + 1)) -ForegroundColor Yellow
+        Write-Host ("  {0}. Exit" -f ($displayoptions.Length + 1)) -ForegroundColor Yellow
         # Get user input
         $temp = Read-Host "Enter the option number" 
         Write-Host " "
         $selection = [int]$temp
         #Exit
-        if ($selection -eq ($display_option_legnth + 1)) {
+        if ($selection -eq ($displayoptions.Length + 1)) {
             Write-Host "
     
          Exiting さようなら.......
