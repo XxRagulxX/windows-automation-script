@@ -6,6 +6,16 @@ if (-not (Test-Path -Path "C:\ProgramData\chocolatey\choco.exe")) {
 else{
     Write-Host "Chocolatey Already Exist!"
 }
+$pkgalias = @(
+    "VLC"
+    "Discord"
+    "EGS"
+    "Steam"
+    "QBittorrent"
+    "Stremio"
+    "Microsoft Visual C++"
+    "7-Zip"
+)
 $packages = @(
     #"TechPowerUp.NVCleanstall",
     "vlc",
@@ -22,6 +32,11 @@ $browserpackages = @(
     "librewolf",
     "googlechrome"
 )
+$pkgbrowseralias = @(
+    "Brave"
+    "LibreWolf"
+    "Google Chrome"
+)
 
 function InstallSoftware {
     $nextcontinue = $true
@@ -29,10 +44,11 @@ function InstallSoftware {
         Write-Host "Select software to install:"
         Write-Host "1. Install all software"
 
-        for ($i = 0; $i -lt $packages.Length; $i++) {
-            Write-Host ("{0}. {1}" -f ($i + 2), $packages[$i])
+        for($i = 0; $i -lt $pkgalias.Length; $i++){
+            Write-Host ("{0}. {1}" -f ($i + 2), $pkgalias[$i])
         }
-        $choice = Read-Host "Enter the number of the software you want to install (e.g., 1 for all, 2 for Vlc.., or 'q' to quit):"
+
+        $choice = Read-Host "Enter the number of the software you want to install (e.g., 1 for all, 2 for Vlc.., or 'q' to quit): "
 
         if ($choice -eq 'q') {
             $nextcontinue = $false
@@ -48,7 +64,8 @@ function InstallSoftware {
             $selectedPackage = $packages[$choice - 2]
             Write-Host "Installing $selectedPackage..."
             Invoke-Expression "choco install $selectedPackage -y -q"
-        } else {
+        }
+         else {
             Write-Host "Invalid choice"
         }
     }
@@ -59,8 +76,8 @@ function InstallBrowser{
     while ($browsercontinue){
         Write-Host "Select Browser to install"
 
-        for ($i = 0; $i -lt $browserpackages.Count; $i++) {
-            Write-Host "$($i + 1). $($browserpackages[$i])"
+        for ($i = 0; $i -lt $pkgbrowseralias.Count; $i++) {
+            Write-Host "$($i + 1). $($pkgbrowseralias[$i])"
             if ($i -ge 2) {
                 break
             }
@@ -85,8 +102,8 @@ function Uninstallsoftware{
     while ($uninstallsoftware){
         Write-Host "Select Software to Uninstall"
 
-        for ($i = 0; $i -lt $packages.Count; $i++) {
-            Write-Host "$($i + 1). $($packages[$i])"
+        for ($i = 0; $i -lt $pkgalias.Count; $i++) {
+            Write-Host "$($i + 1). $($pkgalias[$i])"
         }
         $choice = Read-Host "Enter the number of the software you want to uninstall (e.g., 1 for Brave.Brave, or 'q' to quit):"
 
@@ -106,6 +123,8 @@ function Uninstallsoftware{
     }
 
 }
+
+
 
 $continue = $true
 
