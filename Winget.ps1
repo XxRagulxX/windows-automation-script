@@ -131,8 +131,7 @@ $packages = @{
             "qBittorrent.qBittorrent",
             "VideoLAN.VLC",
             "TechPowerUp.NVCleanstall",
-            "Guru3D.Afterburner",
-            "PrestonN.FreeTube"
+            "Guru3D.Afterburner"
         )
         "LibreWolf"                    = "LibreWolf.Librewolf"
         "Microsoft Visual Studio Code" = "Microsoft.VisualStudioCode"
@@ -140,13 +139,12 @@ $packages = @{
         "EpicGames"                    = "EpicGames.EpicGamesLauncher"
         "Steam"                        = "Valve.Steam"
         "Microsoft VCRedist 2015+ x64" = "Microsoft.VCRedist.2015+.x64"
-        "7zip "                        = "7zip.7zip"
+        "Sevenzip"                     = "7zip.7zip"
         "Surfshark"                    = "Surfshark.Surfshark"
-        "qBittorrent"                  = "qBittorrent.qBittorrent"
+        "QBittorrent"                  = "qBittorrent.qBittorrent"
         "VLC"                          = "VideoLAN.VLC"
         "NVClean"                      = "TechPowerUp.NVCleanstall"
         "MSI Afterburner"              = "Guru3D.Afterburner"
-        "FreeTube"                     = "PrestonN.FreeTube"
     }
 }
 Function DisplayPackages {
