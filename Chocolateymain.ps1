@@ -197,83 +197,76 @@ function WingetUninstaller{  #Winget Function Uninstalling Software
     }
 }
 
-$continue = $true
 
-while ($continue) {  
 
-    Write-Host "Select the Package Manager"     #Selecing Package Manager
+$chocoInstalled = Test-Path -Path "C:\ProgramData\chocolatey\choco.exe"
+$package_manager_access = 0
+
+if (-not $chocoInstalled) {
+    Write-Host "Chocolatey is not installed. Installing Chocolatey..."
+    Set-ExecutionPolicy Bypass -Scope Process -Force
+    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+    Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+    Write-Host "Chocolatey installed successfully."
+    $chocoInstalled = $true
+}
+
+while ($true) {
+    Write-Host "Select the Package Manager"
     Write-Host "1. Chocolatey"
     Write-Host "2. Winget"
+    Write-Host "3. Quit"
 
-    $package_manager = Read-Host "Select the package manager you want to use: "
+    $package_manager = Read-Host "Enter the number of the package manager you want to use: "
 
-    if $package_manager == 1{
-        package_manager_access = 1
-    }elseif ($package_manager == 2){
-        package_manager_access = 2
-    }else{
-        Write-Host "Invalid action. Please select a valid option."
+    if ($package_manager -eq '3') {
         break
     }
-    if package_manager_access = 1{
-        if (-not (Test-Path -Path "C:\ProgramData\chocolatey\choco.exe")) {
-            Set-ExecutionPolicy Bypass -Scope Process -Force
-            [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-            Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-        }else{
-            Write-Host "Chocolatey Already Exist!"
+
+    if ($package_manager -eq '1' -and $chocoInstalled) {
+        $package_manager_access = 1
+    }
+    elseif ($package_manager -eq '2') {
+        $package_manager_access = 2
+    }
+    else {
+        Write-Host "Invalid option. Please select a valid package manager."
+        continue
+    }
+
+    if ($package_manager_access -eq 1) {
+        Write-Host "Chocolatey Package Manager Menu"
+        Write-Host "1. Install Software"
+        Write-Host "2. Install Browser (Under Development)"
+        Write-Host "3. Uninstall Software"
+        Write-Host "4. Quit"
+
+        $action = Read-Host "Enter the number of the action you want to perform:"
+
+        switch ($action) {
+            '1' { InstallSoftware }
+            '2' { Write-Host "Under Development" }
+            '3' { UninstallSoftware }
+            '4' { break }
+            default { Write-Host "Invalid action. Please select a valid option." }
         }
-        $choco_access = $true
-        while($choco_access){    #Chocolatey Package Manager Menu
-            Write-Host "Chocolatey Package Manager"
-            Write-Host "1. Install Software"
-            Write-Host "2. Install Browser"
-            Write-Host "3. Uninstall Software"
-            Write-Host "4. Quit"
+    }
+    elseif ($package_manager_access -eq 2) {
+        Write-Host "Winget Package Manager Menu"
+        Write-Host "1. Install Software"
+        Write-Host "2. Install Browser (Under Development)"
+        Write-Host "3. Uninstall Software"
+        Write-Host "4. Quit"
 
-            $action = Read-Host "Enter the number of the action you want to perform (e.g., 1 for install, 4 to quit):"
+        $action = Read-Host "Enter the number of the action you want to perform:"
 
-            if ($action -eq '4') {
-                $choco_access = $false
-                continue
-            }if ($action -eq '1') {
-                InstallSoftware
-            }elseif ($action -eq '2') {
-                InstallBrowser
-            }elseif ($action -eq '3') {
-                Uninstallsoftware
-            }else{
-                "Invalid action. Please select a valid option."
-            }    
+        switch ($action) {
+            '1' { WingetInstallSoftware }
+            '2' { Write-Host "Under Development" }
+            '3' { WingetUninstallSoftware }
+            '4' { break }
+            default { Write-Host "Invalid action. Please select a valid option." }
         }
-    }elseif package_manager_access = 2{
-        $winget_access = $true
-        While($winget_access){ #Winget Package Manager Menu 
-
-            Write-Host "Winget Package Manager"
-            Write-Host "1. Install Software"
-            Write-Host "2. Install Browser"
-            Write-Host "3. Uninstall Software"
-            Write-Host "4. Quit"
-
-            $action = Read-Host "Enter the number of the action you want to perform (e.g., 1 for install, 4 to quit):"
-
-            if ($action -eq '4') {
-                $winget_access = $false
-                continue
-            }if ($action -eq '1'){
-                WingetInstallSoftware
-            }elseif ($action -eq '2'){
-                Write-Host "Under Development"   #Under Developement Working.
-                break
-            }elseif($action -eq '3'){
-                WingetUninstaller
-            }else{
-                "Invalid action. Please select a valid option."
-            }
-        }
-    }else {
-        Write-Host "Invalid action. Please select a valid option."
     }
 }
 
