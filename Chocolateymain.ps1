@@ -6,52 +6,36 @@ if (-not (Test-Path -Path "C:\ProgramData\chocolatey\choco.exe")) {
 else{
     Write-Host "Chocolatey Already Exist!"
 }
-$pkgalias = @(
-    "VLC"
-    "Discord"
-    "EGS"
-    "Steam"
-    "QBittorrent"
-    "Stremio"
-    "Microsoft Visual C++"
-    "7-Zip"
-    "Spotify"
-)
-$choco_packages = @(
-    #"TechPowerUp.NVCleanstall",
-    "vlc",
-    "discord",
-    "epicgameslauncher",
-    "steam",
-    "qbittorrent",
-    "stremio",
-    "vcredist140",
-    "7zip"
-    "spotify"
-)
+$choco_packages = @{
 
-$winget_packages = @(
-    "VideoLAN.VLC",
-    "Discord.Discord",
-    "EpicGames.EpicGamesLauncher",
-    #"Valve.Steam",
-    "qBittorrent.qBittorrent",
-    #"Stremio.Stremio",
-    #"Microsoft.VCRedist.2015+.x64",
-    "7zip.7zip"
-    #"Surfshark.Surfshark",
-   # "Spotify.Spotify"
-)
-$browserpackages = @(
-    "brave",
-    "librewolf",
-    "googlechrome"
-)
-$pkgbrowseralias = @(
-    "Brave"
-    "LibreWolf"
-    "Google Chrome"
-)
+    "Vlc" = "vlc"
+    "Discord" = "discord"
+    "EGS" = "epicgameslauncher"
+    "Steam" = "steam"
+    "QBittorrent" = "qbittorrent"
+    "Stremio" = "stremio"
+    "Microsoft Visual C++" = "vcredist140"
+    "Spotify" = "spotify"
+    "7-Zip" = "7zip"
+}
+
+$winget_packages = @{
+   "Vlc" = "VideoLAN.VLC"
+   "Discord" = "Discord.Discord"
+   "EGS" = "EpicGames.EpicGamesLauncher"
+   "Steam" =  "Valve.Steam"
+   "QBittorrent" = "qBittorrent.qBittorrent"
+   "Stremio" = "Stremio.Stremio"
+   "Microsoft Visual C++" =  "Microsoft.VCRedist.2015+.x64"
+   "7zip" = "7zip.7zip"
+    "Surfshark" = "Surfshark.Surfshark"
+    "Spotify" =  "Spotify.Spotify"
+}
+$browserpackages = @{
+    "Brave" = "brave"
+    "LibreWolf" = "librewolf"
+    "Google Chrome" = "googlechrome"
+}
 
 function InstallSoftware {
     $nextcontinue = $true
@@ -59,8 +43,10 @@ function InstallSoftware {
         Write-Host "Select software to install:"
         Write-Host "1. Install all software"
 
-        for($i = 0; $i -lt $pkgalias.Length; $i++){
-            Write-Host ("{0}. {1}" -f ($i + 2), $pkgalias[$i])
+        $i = 2
+        $choco_packages.GetEnumerator() | ForEach-Object {
+            Write-Host ("{0}. {1}" -f $i, $_.Key)
+            $i++
         }
 
         $choice = Read-Host "Enter the number of the software you want to install (e.g., 1 for all, 2 for Vlc.., or 'q' to quit): "
@@ -71,16 +57,20 @@ function InstallSoftware {
         }
 
         if ($choice -eq 1) {
-            foreach ($package in $choco_packages) {
+            foreach ($package in $choco_packages.Values) {
                 Write-Host "Installing $package..."
                 Invoke-Expression "choco install $package -y"
             }
         } elseif ($choice -ge 2) {
-            $selectedPackage = $choco_packages[$choice - 2]
-            Write-Host "Installing $selectedPackage..."
-            Invoke-Expression "choco install $selectedPackage -y -q"
-        } 
-         else {
+            $selectedAlias = ($choco_packages.Keys | Select-Object -Index ($choice - 2))
+            $selectedPackage = $choco_packages[$selectedAlias]
+            Write-Host "Installing $selectedAlias..."
+            if ($selectedPackage) {
+                Invoke-Expression "choco install $selectedPackage -y -q"
+            } else {
+                Write-Host "Invalid choice"
+            }
+        } else {
             Write-Host "Invalid choice"
         }
     }
@@ -91,34 +81,40 @@ function InstallBrowser{
     while ($browsercontinue){
         Write-Host "Select Browser to install"
 
-        for ($i = 0; $i -lt $pkgbrowseralias.Count; $i++) {
-            Write-Host "$($i + 1). $($pkgbrowseralias[$i])"
-            if ($i -ge 2) {
-                break
-            }
+        $i = 1
+        $browserpackages.GetEnumerator() | ForEach-Object {
+            Write-Host ("{0}. {1}" -f $i, $_.Key)
+            $i++
         }
+    
         $choice = Read-Host "Enter the number of the Browser you want to install (e.g., 1 for Brave.Brave, or 'q' to quit): "
         if ($choice -eq 'q') {
             $browsercontinue = $false
             break
         }
         if ($choice -ge 1) {
-            $selectedPackage = $browserpackages[$choice - 1]
+            $selectedPackage = ($browserpackages.Keys | Select-Object -Index ($choice - 1))
+            $selected_appended_package = $browserpackages[$selectedPackage]
             Write-Host "Installing $selectedPackage..."
-            Invoke-Expression "choco install $selectedPackage -y"
+            if ($selected_appended_package) {
+                Invoke-Expression "choco install $selected_appended_package -y -q"
         } else {
             Write-Host "Invalid choice. Please select a valid option."
         }
     }
 }
+}
+
 
 function Uninstallsoftware{
     $uninstallsoftware = $true
     while ($uninstallsoftware){
         Write-Host "Select Software to Uninstall"
 
-        for ($i = 0; $i -lt $pkgalias.Count; $i++) {
-            Write-Host "$($i + 1). $($pkgalias[$i])"
+        $i = 1
+        $choco_packages.GetEnumerator() | ForEach-Object {
+            Write-Host ("{0}. {1}" -f $i, $_.Key)
+            $i++
         }
         $choice = Read-Host "Enter the number of the software you want to uninstall (e.g., 1 for Brave.Brave, or 'q' to quit): "
 
@@ -128,10 +124,15 @@ function Uninstallsoftware{
         }
 
         if ($choice -ge 1) {
-            $selectedPackage = $choco_packages[$choice - 1]
-            Write-Host "Uninstalling $selectedPackage..."
-            Invoke-Expression "choco uninstall $selectedPackage -y"
-        } else {
+            $selectedAlias = ($choco_packages.Keys | Select-Object -Index ($choice - 1))
+            $selectedPackage = $choco_packages[$selectedAlias]
+            Write-Host "Installing $selectedAlias..."
+            if ($selectedPackage) {
+                Invoke-Expression "choco uninstall $selectedPackage -y"
+            }else {
+            Write-Host "Bug"
+        }
+        }else{
             Write-Host "Invalid choice. Please select a valid option."
         }
 
@@ -145,8 +146,10 @@ function WingetInstallSoftware {
         Write-Host "Select Software to Install"
         Write-Host "1. Install all software"
         
-        for($i = 0; $i -lt $pkgalias.Length; $i++){
-            Write-Host ("{0}. {1}" -f ($i + 2), $pkgalias[$i])
+        $i = 2
+        $winget_packages.GetEnumerator() | ForEach-Object {
+            Write-Host ("{0}. {1}" -f $i, $_.Key)
+            $i++
         }
         $choice = Read-Host "Enter the number of the software you want to install (e.g., 1 for all, 2 for Vlc.., or 'q' to quit): "
 
@@ -155,14 +158,15 @@ function WingetInstallSoftware {
             break
         }
         if ($choice -eq 1) {
-            foreach ($package in $winget_packages) {
+            foreach ($package in $winget_packages.Values) {
                 Write-Host "Installing $package..."
                 winget install $package -h
             }
         }
         elseif ($choice -ge 2){
-            $selectedPackage = $winget_packages[$choice - 2]
-            Write-Host "Installing $selectedPackage..."
+            $selectedAlias = ($winget_packages.Keys | Select-Object -Index ($choice - 2))
+            $selectedPackage = $winget_packages[$selectedAlias]
+            Write-Host "Installing $selectedAlias..."
             winget install $selectedPackage -h
         }
         else {
@@ -176,8 +180,9 @@ function WingetUninstaller{
     while($wingetuninstaller) {
         Write-Host "Select Software to Install"
 
-        for ($i = 0; $i -lt $pkgalias.Count; $i++) {
-            Write-Host "$($i + 1). $($pkgalias[$i])"
+        $winget_packages.GetEnumerator() | ForEach-Object {
+            Write-Host ("{0}. {1}" -f $i, $_.Key)
+            $i++
         }
 
         $choice = Read-Host "Enter the number of the software you want to uninstall (e.g. 1. for Vlc.., or 'q' to quit): "
@@ -187,8 +192,9 @@ function WingetUninstaller{
             break
         }
         if ($choice -ge 1) {
-            $selectedPackage = $winget_packages[$choice - 1]
-            Write-Host "Uninstalling $selectedPackage..."
+            $selectedAlias = ($winget_packages.Keys | Select-Object -Index ($choice - 1))
+            $selectedPackage = $winget_packages[$selectedAlias]
+            Write-Host "Installing $selectedAlias..."
             winget uninstall --id $selectedPackage -h
         } else {
             Write-Host "Invalid choice. Please select a valid option."
@@ -197,10 +203,16 @@ function WingetUninstaller{
     }
 }
 
-
 $continue = $true
 
 while ($continue) {
+
+    Write-Host "Select the Package Manager"
+    Write-Host "1. Chocolatey"
+    Write-Host "2. Winget"
+
+    #$package_manager = Read-Host "Select the package manager you want to use: "
+
     Write-Host "Select an action:"
     Write-Host "1. Choco Install software"
     Write-Host "2. Choco Install Browser"
@@ -210,12 +222,13 @@ while ($continue) {
 
     $action = Read-Host "Enter the number of the action you want to perform (e.g., 1 for install, 6 to quit): "
 
+
     if ($action -eq '6') {
         $continue = $false
         continue
     }
     if ($action -eq '1') {
-        InstallSoftware
+        WingetInstallSoftware
     } elseif ($action -eq '2') {
         InstallBrowser
     } elseif ($action -eq '3') {
